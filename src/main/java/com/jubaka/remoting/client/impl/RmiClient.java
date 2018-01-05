@@ -1,5 +1,7 @@
 package com.jubaka.remoting.client.impl;
 
+import com.jubaka.remoting.model.RemoteClassLoader;
+import com.jubaka.remoting.model.dto.ClassConteiner;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
@@ -8,8 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -18,31 +22,37 @@ import java.util.concurrent.ExecutorService;
  */
 public class RmiClient implements Serializable {
 
-    public static void main(String[] args) {
-        init("com.jubaka.remoting");
-        /*
-        System.setProperty("java.rmi.server.useCodebaseOnly","false");
+    public static void main(String[] args) throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("app-context.xml");
         ExecutorService remote = (ExecutorService)context.getBean("remoteExecutor");
+        RemoteClassLoader classLoader = (RemoteClassLoader) context.getBean("remoteClassLoader");
+
+        init(classLoader, "com.jubaka.remoting");
         System.out.println(remote.submit(new CustomThread()));
-*/
     }
 
-    public static void init(String packegeRoot) {
+    public static void init(RemoteClassLoader classLoader, String packegeRoot) throws IOException {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setScanners(new SubTypesScanner(false))
                 .setUrls(ClasspathHelper.forPackage(packegeRoot))
         );
         System.out.println(reflections.getAllTypes());
 
-
-
         Set<Class<? extends Object>> allClasses =
                 reflections.getSubTypesOf(Object.class);
         System.out.println(allClasses.size());
         allClasses.forEach(cl -> {
-            System.out.println(cl.getName());
-            System.out.println(new File(cl.getProtectionDomain().getCodeSource().getLocation().getPath()+cl.getName().replace(".","/")+".class"));
+            try {
+                ClassConteiner cc = new ClassConteiner();
+                cc.setPackageName(cl.getPackage().getName());
+                cc.setClassName(cl.getName());
+                cc.setBytecode(Files.readAllBytes(Paths.get(cl.getProtectionDomain().getCodeSource().getLocation().getPath()+cl.getName().replace(".","/")+".class")));
+                classLoader.loadClass(cc);
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+
+
         });
     }
 

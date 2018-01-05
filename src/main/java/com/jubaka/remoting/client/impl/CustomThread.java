@@ -19,6 +19,6 @@ public class CustomThread implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        System.out.println("RemoteProcess");
+        System.out.println("RemoteProcessV2");
     }
 }
