@@ -24,11 +24,12 @@ public class RmiClient implements Serializable {
 
     public static void main(String[] args) throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("app-context.xml");
+
         ExecutorService remote = (ExecutorService)context.getBean("remoteExecutor");
         RemoteClassLoader classLoader = (RemoteClassLoader) context.getBean("remoteClassLoader");
 
         init(classLoader, "com.jubaka.remoting");
-        System.out.println(remote.submit(new CustomThread()));
+        remote.execute(new CustomThread());
     }
 
     public static void init(RemoteClassLoader classLoader, String packegeRoot) throws IOException {

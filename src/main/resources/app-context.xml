@@ -10,8 +10,10 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     </bean>
 
     <bean id="remoteClassLoader" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
-        <property name="serviceUrl" value="rmi://localhost:1199/RemoteClassLoader"></property>
+        <property name="serviceUrl" value="rmi://localhost:1099/RemoteClassLoader"></property>
         <property name="serviceInterface" value="com.jubaka.remoting.model.RemoteClassLoader"></property>
     </bean>
 
 </beans>
+
+

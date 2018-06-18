@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by root on 04.01.18.
  */
 public class CustomThread implements Runnable, Serializable {
+    static String ver = "10";
     /**
      * When an object implementing interface <code>Runnable</code> is used
      * to create a thread, starting the thread causes the object's
@@ -19,6 +20,6 @@ public class CustomThread implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        System.out.println("RemoteProcessV2");
+        System.out.println("RemoteProcessV17");
     }
 }
