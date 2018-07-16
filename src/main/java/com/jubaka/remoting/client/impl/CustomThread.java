@@ -1,11 +1,12 @@
 package com.jubaka.remoting.client.impl;
 
 import java.io.Serializable;
+import java.util.concurrent.Callable;
 
 /**
  * Created by root on 04.01.18.
  */
-public class CustomThread implements Runnable, Serializable {
+public class CustomThread implements Callable<String>, Serializable {
     static String ver = "10";
     /**
      * When an object implementing interface <code>Runnable</code> is used
@@ -18,8 +19,14 @@ public class CustomThread implements Runnable, Serializable {
      *
      * @see Thread#run()
      */
-    @Override
+   // @Override
     public void run() {
-        System.out.println("RemoteProcessV17");
+        System.out.println("RemoteProcessV225");
+    }
+
+    @Override
+    public String call() throws Exception {
+
+        return "niga niga niga nigasdfgsdfgsdfg";
     }
 }
