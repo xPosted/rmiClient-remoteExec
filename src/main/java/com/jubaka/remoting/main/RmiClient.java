@@ -14,10 +14,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -52,13 +55,14 @@ public class RmiClient implements Serializable {
         System.out.println(allClasses.size());
         allClasses.forEach(cl -> {
             try {
+                if ( ! cl.getPackage().getName().startsWith(packegeRoot)) return;
                 ClassConteiner cc = new ClassConteiner();
                 cc.setPackageName(cl.getPackage().getName());
                 cc.setClassName(cl.getName());
                 cc.setBytecode(Files.readAllBytes(Paths.get(cl.getProtectionDomain().getCodeSource().getLocation().getPath()+cl.getName().replace(".","/")+".class")));
                 classLoader.loadClass(cc);
-            } catch (IOException io) {
-                io.printStackTrace();
+            } catch (Exception io) {
+               // io.printStackTrace();
             }
 
 

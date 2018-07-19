@@ -8,7 +8,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean class="com.jubaka.remoting.socket.factory.XorServerSocketFactory" id="xorServerSocketFactory"></bean>
 
     <bean id="remoteFutureController" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
-        <property name="serviceUrl" value="rmi://localhost:1299/RemoteFutureController"></property>
+        <property name="serviceUrl" value="rmi://31.172.140.209:1103/RemoteFutureController"></property>
         <property name="serviceInterface" value="com.jubaka.remoting.model.RemoteFutureController"></property>
         <property name="registryClientSocketFactory" ref="xorClientSocketFactory"></property>
     </bean>
